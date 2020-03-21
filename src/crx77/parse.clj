@@ -88,20 +88,23 @@
       :is/processed false
     )
   )
+
+  (defn rand-str [in]
+    (str in (apply str (take 4 (repeatedly #(char (+ (rand 26) 65)))))))
   
   (defn createDepsRules [deps,parent]
     (mapv 
       (fn [r] 
         (if (vector? r)
           (let [
-                p1CruxId (getShadowIdKwd parent 1)
+                p1CruxId (getShadowIdKwd (rand-str parent) 1)
                 p1 (createShadow (first r) parent p1CruxId)]
             (into 
               (vector p1) 
               (map-indexed 
                 (fn [idx,itm] 
                   (createShadow itm p1CruxId 
-                    (getShadowIdKwd parent (+ idx 2))))
+                    (getShadowIdKwd (rand-str parent) (+ idx 2))))
                 (rest r)
               )
             )
